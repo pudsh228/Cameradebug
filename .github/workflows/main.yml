@@ -8,8 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Unzip project
-        run: unzip -q "CamOverlay (2).zip"
+        with:
+          fetch-depth: 0
+      - name: Unzip newest project zip
+        run: |
+          f=$(git log --diff-filter=AM --name-only --pretty=format: -- '*.zip' | grep . | head -n1)
+          echo "Using: $f"
+          unzip -q -o "$f"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
